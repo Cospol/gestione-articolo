@@ -19,23 +19,23 @@ import it.gestionearticolijspservletjpamaven.utility.UtilityArticoloForm;
 @WebServlet("/ExecuteUpdateArticoloServlet")
 public class ExecuteUpdateArticoloServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-   
 
-  
+
+
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+
 		String idInputParam = request.getParameter("id");
 		String codiceInputParam = request.getParameter("codice");
 		String descrizioneInputParam = request.getParameter("descrizione");
 		String prezzoInputParam = request.getParameter("prezzo");
 		String dataArrivoParam = request.getParameter("dataArrivo");
-		 
+
 		Date dataArrivoParsed = UtilityArticoloForm.parseDateArrivoFromString(dataArrivoParam);
-	  
+
 		Articolo articoloInstance = new Articolo(Long.parseLong(idInputParam),codiceInputParam, descrizioneInputParam,
-				Integer.parseInt(prezzoInputParam), dataArrivoParsed);
+				prezzoInputParam != null ? Integer.parseInt(prezzoInputParam) : 0, dataArrivoParsed);
 		
-		
+
 		if (!UtilityArticoloForm.validateInput(codiceInputParam, descrizioneInputParam, prezzoInputParam,
 				dataArrivoParam) || dataArrivoParsed == null) {
 			request.setAttribute("errorMessage", "Attenzione sono presenti errori di validazione");
@@ -43,14 +43,14 @@ public class ExecuteUpdateArticoloServlet extends HttpServlet {
 			request.getRequestDispatcher("/articolo/update.jsp").forward(request, response);
 			return;
 		}
-		
- 		try {
+
+		try {
 			MyServiceFactory.getArticoloServiceInstance().aggiorna(articoloInstance);
 			request.setAttribute("successMessage", "Operazione effettuata con successo");
 		} catch (Exception e) {
 			e.printStackTrace();
 			request.setAttribute("errorMessage", "Attenzione si è verificato un errore nella modifica dell' articolo");
- 			request.getRequestDispatcher("index.jsp").forward(request, response);
+			request.getRequestDispatcher("index.jsp").forward(request, response);
 			return;
 		}
 
@@ -58,5 +58,5 @@ public class ExecuteUpdateArticoloServlet extends HttpServlet {
 		request.getRequestDispatcher("index.jsp").forward(request, response);
 	}
 
-	
+
 }
