@@ -33,7 +33,7 @@ public class ExecuteUpdateArticoloServlet extends HttpServlet {
 		Date dataArrivoParsed = UtilityArticoloForm.parseDateArrivoFromString(dataArrivoParam);
 
 		Articolo articoloInstance = new Articolo(Long.parseLong(idInputParam),codiceInputParam, descrizioneInputParam,
-				prezzoInputParam != null ? Integer.parseInt(prezzoInputParam) : 0, dataArrivoParsed);
+				prezzoInputParam != ""  ? Integer.parseInt(prezzoInputParam) : 0, dataArrivoParsed);
 		
 
 		if (!UtilityArticoloForm.validateInput(codiceInputParam, descrizioneInputParam, prezzoInputParam,
